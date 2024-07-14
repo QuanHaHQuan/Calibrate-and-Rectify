@@ -1,4 +1,4 @@
-<h1 align = "center">Git-Updates were rejected 解决</h1>
+<h1 align = "center">OpenCV下的单目标定，双目标定与立体校正(calibrateCamera, stereoCalibrate and stereoRectify)</h1>
 
 @[toc]
 # 1. 杂话   
