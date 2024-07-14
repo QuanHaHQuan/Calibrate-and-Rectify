@@ -3,22 +3,19 @@
 # 1. Introduction  
 &emsp;Everyone has probably used OpenCV and cameras before, so today, let's talk about how to use photos taken with two cameras and OpenCV to perform calibration and stereo rectification. There are many theoretical explanations for camera calibration, so I will just provide three well-written posts for reference:
 
-[fengye2two的帖子-标定
+&emsp;[fengye2two的帖子-标定
 ](https://blog.csdn.net/fengye2two/article/details/80686409)
 
-[卍卐没想到的帖子-标定
+&emsp;[卍卐没想到的帖子-标定
 ](https://blog.csdn.net/a083614/article/details/78579163)
 
-[瞻邈-立体校正](https://blog.csdn.net/xhtchina/article/details/126492195)
+&emsp;[瞻邈-立体校正](https://blog.csdn.net/xhtchina/article/details/126492195)
 
 &emsp;In short, I won’t dive deep into the theory. Instead, I will briefly discuss the implementation through code.
 &emsp;For the calibration part, part of the code is referenced from:
-[Temuge Batpurev's Blog](https://temugeb.github.io/opencv/python/2021/02/02/stereo-camera-calibration-and-triangulation.html)
+&emsp;[Temuge Batpurev's Blog](https://temugeb.github.io/opencv/python/2021/02/02/stereo-camera-calibration-and-triangulation.html)
 &emsp;For the code to draw epipolar lines, the reference is:
-[逆光525的帖子-绘制极线](https://blog.csdn.net/qq_22059843/article/details/103400094)
-&emsp;Additionally, the data and complete code I used are available here:
-[Repo : Calibrate-and-Rectify
-](https://github.com/QuanHaHQuan/Calibrate-and-Rectify/blob/main/readme.md)
+&emsp;[逆光525的帖子-绘制极线](https://blog.csdn.net/qq_22059843/article/details/103400094)
 # 2. Single Camera Calibration
 ## 2.1 Let's Look at the Code
 
