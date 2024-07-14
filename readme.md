@@ -1,6 +1,5 @@
 <h1 align = "center">OpenCV下的单目标定，双目标定与立体校正(calibrateCamera, stereoCalibrate and stereoRectify)</h1>
 
-[@TOC]
 # 1. 杂话   
 &emsp;大伙儿应该都用过OpenCV和相机吧，所以今天咱们就来说说怎么使用两个相机拍摄的照片和OpenCV来进行标定和立体校正。相机标定的理论解释其实有很多啦，我就随便找两个写得不错的帖子给大家参考一下哈：
 
