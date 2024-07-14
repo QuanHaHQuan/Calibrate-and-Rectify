@@ -19,8 +19,8 @@
 &emsp;Additionally, the data and complete code I used are available here:
 [Repo : Calibrate-and-Rectify
 ](https://github.com/QuanHaHQuan/Calibrate-and-Rectify/blob/main/readme.md)
-# 2. 单目标定
-## 2.1 先看代码
+# 2. Single Camera Calibration
+## 2.1 Let's Look at the Code
 
 ```python
 chessboard_size = (9, 6)
@@ -92,7 +92,7 @@ print(ret_side)
 &emsp;First, the objp variable represents the world coordinates in the chessboard coordinate system. For simplicity, I assume the calibration board is aligned with the xy-plane, so all z-coordinates of the points are zero.
 &emsp;Next is the calibrateCamera function. The specific input parameters are all listed above. It's important to note that the returned error (RMSE) should ideally be below 0.5 for good calibration. If the error is large, you might need to adjust your calibration images, for example, by improving lighting conditions or adding more diverse angles.
 
-## 2.3 calibrateCamera参数
+## 2.3 calibrateCamera Parameters
 
 ```python
     # Single camera calibration using calibrateCamera
@@ -112,8 +112,8 @@ print(ret_side)
     # tvecs: List of translation vectors, representing the translation of the camera for each view.
 ```
 
-# 3. 双目标定
-## 3.1 先看代码
+# 3. Stereo Calibration
+## 3.1 Let's Look at the Code
 
 ```python
 flags = cv2.CALIB_FIX_INTRINSIC
@@ -123,150 +123,149 @@ ret, mtx_main, dist_main, mtx_side, dist_side, R, T, E, F = cv2.stereoCalibrate(
     mtx_main, dist_main, mtx_side, dist_side,
     frame_size, criteria=criteria, flags=flags)
 ```
-## 3.2 stereoCalibrate参数
+## 3.2 stereoCalibrate Parameters
 
 ```python
-    # 双目标定函数 
+    # Stereo calibration function
     # ret, cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2, R, T, E, F = 
     # cv2.stereoCalibrate(objectPoints, imagePoints1, imagePoints2, 
     #                       cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2, imageSize,
     #                       criteria=criteria, flags=flags)
     
-    # 输入参数：
-    # objectPoints: 物体点坐标的列表，类似 calibrateCamera 函数中的 objpoints。
-    # imagePoints1: 左相机的图像点坐标列表。
-    # imagePoints2: 右相机的图像点坐标列表。
-    # cameraMatrix1: 左相机的初始内参矩阵。
-    # distCoeffs1: 左相机的初始畸变系数。
-    # cameraMatrix2: 右相机的初始内参矩阵。
-    # distCoeffs2: 右相机的初始畸变系数。
-    # imageSize: 图像的大小，格式为 (width, height)。
+    # Input parameters:
+    # objectPoints: List of object points, similar to the objpoints in calibrateCamera.
+    # imagePoints1: List of image points from the left camera.
+    # imagePoints2: List of image points from the right camera.
+    # cameraMatrix1: Initial intrinsic matrix for the left camera.
+    # distCoeffs1: Initial distortion coefficients for the left camera.
+    # cameraMatrix2: Initial intrinsic matrix for the right camera.
+    # distCoeffs2: Initial distortion coefficients for the right camera.
+    # imageSize: Size of the image, specified as (width, height).
     
-    # criteria (可选): 终止条件，用于优化算法的迭代过程。
-        # cv2.TERM_CRITERIA_MAX_ITER：当达到最大迭代次数时停止。
-        # cv2.TERM_CRITERIA_EPS：当参数变化小于设定的精度时停止。
-        # 可以组合使用，例如cv2.TERM_CRITERIA_MAX_ITER + cv2.TERM_CRITERIA_EPS，表示当满足任意一个条件时停止。
-        # 最大迭代次数：一个整数，指定最大迭代次数。例如，100表示最多迭代100次。
-        # 精度阈值：一个浮点数，指定参数变化小于该值时停止迭代。例如，1e-5表示当参数变化小于0.00001时停止迭代。
+    # criteria (optional): Termination criteria for the optimization algorithm.
+        # cv2.TERM_CRITERIA_MAX_ITER: Stop when the maximum number of iterations is reached.
+        # cv2.TERM_CRITERIA_EPS: Stop when the change in parameters is below a specified threshold.
+        # These can be combined, such as cv2.TERM_CRITERIA_MAX_ITER + cv2.TERM_CRITERIA_EPS, indicating stopping when either condition is met.
+        # Max iterations: An integer specifying the maximum number of iterations, e.g., 100 means at most 100 iterations.
+        # Precision threshold: A floating point number specifying the threshold for stopping when parameter changes are below this value, e.g., 1e-5 means stop when changes are less than 0.00001.
     
-    # flags (可选): 标志位，用于指定某些参数的固定或自由度。
-        # cv2.CALIB_FIX_INTRINSIC：在标定过程中保持两个相机的内参数矩阵不变。这意味着在双目标定过程中不会重新估计每个相机的内参数矩阵（包括焦距、光轴中心等），而是使用单个相机标定结果中得到的内参数。
-        # cv2.CALIB_USE_INTRINSIC_GUESS：使用传入的内参数作为初始猜测值，并在标定过程中对其进行优化。这对提高标定精度很有帮助，特别是在内参数已经较准确的情况下。
-        # cv2.CALIB_FIX_PRINCIPAL_POINT：保持主点（光轴中心）固定不变。
-        # cv2.CALIB_FIX_FOCAL_LENGTH：保持焦距不变。
-        # cv2.CALIB_FIX_ASPECT_RATIO：保持焦距的长宽比不变。
-        # cv2.CALIB_ZERO_TANGENT_DIST：假设切向畸变参数为零并保持不变。
-        # cv2.CALIB_RATIONAL_MODEL：使标定函数使用一个带有6个畸变系数的合理模型。
-        # cv2.CALIB_SAME_FOCAL_LENGTH：假设两个摄像头具有相同的焦距。
+    # flags (optional): Flags to specify certain parameters as fixed or to define their degree of freedom.
+        # cv2.CALIB_FIX_INTRINSIC: Keep the intrinsic parameters of both cameras fixed during calibration. This means that the intrinsic matrices (including focal length, principal point, etc.) will not be re-estimated during stereo calibration, using the results from single camera calibration instead.
+        # cv2.CALIB_USE_INTRINSIC_GUESS: Use the provided intrinsic parameters as initial guesses and optimize them during calibration. This can improve calibration accuracy, especially if the initial intrinsic parameters are already quite accurate.
+        # cv2.CALIB_FIX_PRINCIPAL_POINT: Keep the principal points (optical centers) fixed.
+        # cv2.CALIB_FIX_FOCAL_LENGTH: Keep the focal lengths fixed.
+        # cv2.CALIB_FIX_ASPECT_RATIO: Keep the aspect ratio of the focal lengths fixed.
+        # cv2.CALIB_ZERO_TANGENT_DIST: Assume zero tangential distortion and keep it fixed.
+        # cv2.CALIB_RATIONAL_MODEL: Enable the use of a rational model with 6 distortion coefficients in the calibration function.
+        # cv2.CALIB_SAME_FOCAL_LENGTH: Assume the same focal length for both cameras.
     
-    # 输出参数：
-    # ret: 平均重投影误差。
-    # cameraMatrix1: 校准后的左相机内参矩阵。
-    # distCoeffs1: 校准后的左相机畸变系数。
-    # cameraMatrix2: 校准后的右相机内参矩阵。
-    # distCoeffs2: 校准后的右相机畸变系数。
-    # R: 旋转矩阵，将右相机坐标系转换到左相机坐标系。
-    # T: 平移向量，将右相机坐标系转换到左相机坐标系。
-    # E: 基础矩阵。
-    # F: 本质矩阵。
+    # Output parameters:
+    # ret: The average re-projection error.
+    # cameraMatrix1: The calibrated intrinsic matrix for the left camera.
+    # distCoeffs1: The calibrated distortion coefficients for the left camera.
+    # cameraMatrix2: The calibrated intrinsic matrix for the right camera.
+    # distCoeffs2: The calibrated distortion coefficients for the right camera.
+    # R: The rotation matrix that transforms the coordinate system of the right camera to the coordinate system of the left camera.
+    # T: The translation vector that transforms the coordinate system of the right camera to the coordinate system of the left camera.
+    # E: The essential matrix.
+    # F: The fundamental matrix.
 ```
 
-# 4. 立体校正
-## 4.1 先看代码
+# 4. Stereo Rectification
+## 4.1 Let's Look at the Code
 
 ```python
-# 立体校正
-# 立体校正
+# Stereo Rectification
 R1, R2, P1, P2, Q, roi1, roi2 = cv2.stereoRectify(mtx_main, dist_main, mtx_side, dist_side, frame_size, R, T)
 
-# 对测试图像进行校正
+# Function to rectify images
 def rectify_image(img, mtx, dist, R, P):
     h, w = img.shape[:2]
     mapx, mapy = cv2.initUndistortRectifyMap(mtx, dist, R, P, (w, h), cv2.CV_32FC1)
     return cv2.remap(img, mapx, mapy, cv2.INTER_LINEAR)
 
-# 读取测试图片
+# Read the test images
 img_main = cv2.imread('demo/left03.jpg')
 img_side = cv2.imread('demo/right03.jpg')
 
-# 校正图像
+# Rectify the images
 rectified_main = rectify_image(img_main, mtx_main, dist_main, R1, P1)
 rectified_side = rectify_image(img_side, mtx_side, dist_side, R2, P2)
 
-# 保存校正后的图像
+# Save the rectified images
 cv2.imwrite('rectified_main.png', rectified_main)
 cv2.imwrite('rectified_side.png', rectified_side)
 ```
-## 4.2 一点解释
-&emsp;其实也没啥好解释的吧，可能就是需要说一下这个initUndistortRectifyMap和这个remap函数是啥子。简单来说哈，第一个函数就是根据相机自己的内参数和两个相机之间的外参数，生成一个映射来消除图片的畸变（为啥要消除可以看上面的理论贴）。第二个函数就是一个映射过程，根据上一个函数生成的映射执行这个映射过程，得到矫正之后的图片。具体的参数我在下面也解释一下吧。
+## 4.2 Explanation
+&emsp;There's not much to explain here. It's mainly about understanding the functions initUndistortRectifyMap and remap. Simply put, the first function generates a mapping to remove distortions from the images based on the camera's intrinsic parameters and the extrinsic parameters between the two cameras. The second function applies this mapping to obtain the rectified images. I'll explain the parameters of these functions below.
 
-## 4.3 stereoRectify参数
+## 4.3 stereoRectify Parameters
 
 ```python
 # R1, R2, P1, P2, Q, roi1, roi2 = 
 # cv2.stereoRectify(cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2, imageSize, 
 #                   R, T, flags=cv2.CALIB_ZERO_DISPARITY, alpha=0, newImageSize=(0, 0))
-# 输入参数：
-# cameraMatrix1: 左相机内参矩阵。
-# distCoeffs1: 左相机畸变系数。
-# cameraMatrix2: 右相机内参矩阵。
-# distCoeffs2: 右相机畸变系数。
-# imageSize: 图像的大小，格式为 (width, height)。
-# R: 旋转矩阵，将右相机坐标系转换到左相机坐标系。
-# T: 平移向量，将右相机坐标系转换到左相机坐标系。
-# flags (可选): 校正类型标志。
-# alpha (可选): 自由参数，范围为 [0, 1]，决定图像边缘区域的裁剪程度。
-# newImageSize (可选): 新图像的大小。
-# 输出参数：
-# R1: 左相机的校正变换（旋转矩阵）。
-# R2: 右相机的校正变换（旋转矩阵）。
-# P1: 左相机的新投影矩阵。
-# P2: 右相机的新投影矩阵。
-# Q: 视差-深度映射矩阵。
-# roi1: 左相机图像的有效区域。
-# roi2: 右相机图像的有效区域。
+# Input Parameters:
+# cameraMatrix1: Intrinsic parameters of the left camera.
+# distCoeffs1: Distortion coefficients of the left camera.
+# cameraMatrix2: Intrinsic parameters of the right camera.
+# distCoeffs2: Distortion coefficients of the right camera.
+# imageSize: Size of the image in (width, height) format.
+# R: Rotation matrix to transform the right camera's coordinate system to the left camera's coordinate system.
+# T: Translation vector to transform the right camera's coordinate system to the left camera's coordinate system.
+# flags (optional): Rectification type flag.
+# alpha (optional): Free scaling parameter between [0, 1], controlling the cropping of image edges.
+# newImageSize (optional): Size of the new image.
+# Output Parameters:
+# R1: Rectification transform (rotation matrix) for the left camera.
+# R2: Rectification transform (rotation matrix) for the right camera.
+# P1: New projection matrix for the left camera.
+# P2: New projection matrix for the right camera.
+# Q: Disparity-to-depth mapping matrix.
+# roi1: Valid pixel region of the left camera image.
+# roi2: Valid pixel region of the right camera image.
 ```
-## 4.4 initUndistortRectifyMap参数
+## 4.4 initUndistortRectifyMap Parameters
 ```python
-# 计算畸变和矫正的映射 initUndistortRectifyMap
+# Compute undistortion and rectification transformation map
 # map1, map2 = 
 # cv2.initUndistortRectifyMap(cameraMatrix, distCoeffs, R, newCameraMatrix, size, m1type)
-# 输入参数：
-# cameraMatrix: 相机内参矩阵。
-# distCoeffs: 相机畸变系数。
-# R: 校正变换（旋转矩阵）。
-# newCameraMatrix: 新的相机矩阵。
-# size: 图像的大小，格式为 (width, height)。
-# m1type: 输出映射的类型，可以是 cv2.CV_32FC1 或 cv2.CV_16SC2 等。
-# 输出参数：
-# map1: 第一张映射表，用于 remap 函数。
-# map2: 第二张映射表，用于 remap 函数。
+# Input Parameters:
+# cameraMatrix: Intrinsic parameters of the camera.
+# distCoeffs: Distortion coefficients of the camera.
+# R: Rectification transformation (rotation matrix).
+# newCameraMatrix: New camera matrix.
+# size: Size of the image in (width, height) format.
+# m1type: Type of the first output map, can be cv2.CV_32FC1 or cv2.CV_16SC2 etc.
+# Output Parameters:
+# map1: The first output map for the remap function.
+# map2: The second output map for the remap function.
 ```
-## 4.5 remap参数
+## 4.5 remap Parameters
 
 ```python
-# 重映射函数 remap
+# Remap function
 # dst = cv2.remap(src, map1, map2, interpolation, borderMode, borderValue)
-# 输入参数：
-# src: 输入图像。
-# map1: 第一张映射表。
-# map2: 第二张映射表。
-# interpolation: 插值方法，如 cv2.INTER_LINEAR 或 cv2.INTER_CUBIC。
-# borderMode (可选): 边界模式，定义如何处理图像边界，如 cv2.BORDER_CONSTANT 或 cv2.BORDER_REPLICATE。
-# borderValue (可选): 边界值，如果使用 cv2.BORDER_CONSTANT 时使用。
-# 输出参数：
-# dst: 校正后的图像。
+# Input Parameters:
+# src: Input image.
+# map1: The first map.
+# map2: The second map.
+# interpolation: Interpolation method, like cv2.INTER_LINEAR or cv2.INTER_CUBIC.
+# borderMode (optional): Border mode to handle image boundaries, like cv2.BORDER_CONSTANT or cv2.BORDER_REPLICATE.
+# borderValue (optional): Border value used if borderMode is cv2.BORDER_CONSTANT.
+# Output Parameters:
+# dst: The rectified image.
 ```
 
-# 5. 绘制极线
+# 5. Drawing Epipolar Lines
 
-## 5.1 先看代码
+## 5.1 Let's Look at the Code
 ```python
 plt.figure(figsize=(20, 20))
 
-for i in range(0,1):  # 以第一对图片为例
-    im_L=Image.fromarray(rectified_main) # numpy 转 image类
-    im_R=Image.fromarray(rectified_side) # numpy 转 image 类
+for i in range(0,1):  # Taking the first pair of images as an example
+    im_L=Image.fromarray(rectified_main) # Convert numpy array to Image class
+    im_R=Image.fromarray(rectified_side) # Convert numpy array to Image class
 
     width = im_L.size[0]*2
     height = im_L.size[1]
@@ -275,7 +274,7 @@ for i in range(0,1):  # 以第一对图片为例
     img_compare.paste(im_L,box=(0,0))
     img_compare.paste(im_R,box=(640,0))
     
-    #在已经极线对齐的图片上均匀画线
+# Draw evenly spaced horizontal lines on the rectified images
     for i in range(1,20):
         len=480/20
         plt.axhline(y=i*len, color='r', linestyle='-')
@@ -283,9 +282,9 @@ for i in range(0,1):  # 以第一对图片为例
     plt.savefig('epipolar_lines.png', bbox_inches='tight', pad_inches=0)
     plt.show()
 ```
-## 5.2 一点解释
-&emsp;注意哈，因为有点怕麻烦，我这里不是去算了那个极线，然后画的线。我是直接画了水平线作为极线，然后手动去看在同一个水平线上的点是不是对应的。当然了对于标定图片，你也可以直接使用角点作为对应点，画一下极线来看一看。但是如果不是标定图片，可能就需要用SIFT关键点匹配了，这一点OpenCV官方有：[官方教程](https://docs.opencv.org/3.4/da/de9/tutorial_py_epipolar_geometry.html)
+## 5.2 Explanation
+&emsp;Note that, to avoid complexity, I didn't calculate the actual epipolar lines but instead drew horizontal lines as epipolar lines and visually checked if points on the same horizontal line are corresponding points. For calibration images, you can also use the corner points as correspondences and draw the epipolar lines accordingly. However, for non-calibration images, you might need to use SIFT keypoint matching. For more details, you can refer to the [OpenCV official tutorial](https://docs.opencv.org/3.4/da/de9/tutorial_py_epipolar_geometry.html)
 
-## 5.3 校正结果
+## 5.3 Rectification Result
 ![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/14e579a7727f4ce1a6f2198bfa9bef75.png)
-&emsp;OK，基本符合预期哦~
+&emsp;OK，it matches the expectation quite well!
