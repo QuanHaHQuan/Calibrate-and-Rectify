@@ -285,4 +285,4 @@ for i in range(0,1):  # Taking the first pair of images as an example
 &emsp;OK，it matches the expectation quite well!
 
 # 6. What's more
-&emsp;When there is a large angle between cameras, the process of stereo calibration and rectification might fail. Therefore, in the next post, we will look at how to use uncalibrated rectification functions: uncalibrated rectification as in readme_stereoRectifyUncalibrated.md.
+&emsp;When there is a large angle between cameras, the process of stereo calibration and rectification might fail. Therefore, in the next post, we will look at how to use uncalibrated rectification functions: uncalibrated rectification as in stereo_rectify_uncalibrated.md.
