@@ -1,6 +1,6 @@
-<h1 align = "center">OpenCV下的无标定校正(stereoRectifyUncalibrated)</h1>
+<h1 align="center">Uncalibrated Rectification in OpenCV (stereoRectifyUncalibrated)</h1>
 
-# 1. 杂话   
+# 1. Introduction  
 &emsp;In previous posts, we discussed some conventional calibration and rectification methods Camera Calibration, Stereo Calibration, and Stereo Rectification in OpenCV (calibrateCamera, stereoCalibrate, and stereoRectify).](https://blog.csdn.net/c_h_q_/article/details/140413330?spm=1001.2014.3001.5501)，However, if there is a large angle between the two cameras, the stereo calibration and rectification steps might not be suitable, as referenced in this post[When Stereo Rectification Fails. ](https://stackoverflow.com/questions/57039780/opencv-stereo-image-rectification-doesnt-work-properly-when-the-angle-between-c/57040516#57040516)，To solve this issue, today we will discuss how to use uncalibrated rectification functions:
 
 &emsp;By the way, the data and complete code I used are here: Repo: Calibrate-and-Rectify：[Repo : Calibrate-and-Rectify](https://github.com/QuanHaHQuan/Calibrate-and-Rectify/blob/main/readme.md)
